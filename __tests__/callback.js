@@ -1,7 +1,12 @@
 const Callback = require('../src/callback');
-const { secret, data } = require('./data/callback');
+const CallbackMock = require('./mock/callback');
+const {
+  secret, data, dataWithProto1, dataWithProto2,
+} = require('./data/callback');
 
 const cb = new Callback(secret, data);
+const cbMock1 = new CallbackMock(secret, dataWithProto1);
+const cbMock2 = new CallbackMock(secret, dataWithProto2);
 
 test('Property setting', () => {
   expect(cb.callback.payment.id).toBe('000049');
@@ -38,4 +43,12 @@ test('Callback.isPaymentSuccess', () => {
 
 test('Callback.getPaymentId', () => {
   expect(cb.getPaymentId()).toBe('000049');
+});
+
+test('CallbackMock1.isPaymentDecline (request contains __proto__)', () => {
+  expect(cbMock1.isPaymentSuccess()).toBe(false);
+});
+
+test('CallbackMock2.isPaymentDecline (request contains __proto__)', () => {
+  expect(cbMock2.isPaymentSuccess()).toBe(false);
 });
