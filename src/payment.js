@@ -1,4 +1,5 @@
 const signer = require('./signer');
+const cipher = require('./cipher');
 
 /**
  * Payment Object
@@ -54,6 +55,7 @@ const signer = require('./signer');
  * @property {string} baseurl
  * @property {string} paymentExtraParam
  * @property {string} frameMode
+ * @property {string} encryptKey
  */
 class Payment {
   /**
@@ -71,6 +73,10 @@ class Payment {
       project_id: projectId,
       interface_type: JSON.stringify({ id: 22 }),
     };
+    if (Object.prototype.hasOwnProperty.call(obj, 'encrypt_key')) {
+      this.encryptKey = obj.encrypt_key;
+      delete obj.encrypt_key;
+    }
 
     // set up params via constructor
     Object.entries(obj).forEach(([key, val]) => {
@@ -116,10 +122,27 @@ class Payment {
    * @returns {string} URL for payment terminal
    */
   getUrl() {
+    if (this.encryptKey) {
+      return this.getCipherUrl();
+    }
+
     const signature = signer(this.params, this.salt);
     const params = this.getQueryString();
 
     return `${this.baseURI}/payment?${params}&signature=${encodeURIComponent(signature)}`;
+  }
+
+  /**
+   * Get cipher URL
+   *
+   * @returns {string} cipher URL for payment terminal
+   */
+  getCipherUrl() {
+    const signature = signer(this.params, this.salt);
+    const params = this.getQueryString();
+    const encrypt = cipher(`/payment?${params}&signature=${encodeURIComponent(signature)}`, this.encryptKey);
+
+    return `${this.baseURI}/${this.params.project_id}/${encrypt.encryptedData}`;
   }
 
   /**
