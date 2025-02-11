@@ -1,11 +1,9 @@
-# TrxHosts Javascript package
-
-[![Build Status](https://travis-ci.com/trxhosts/paymentpage-sdk-js.svg?branch=main)](https://travis-ci.com/trxhosts/paymentpage-sdk-js)
+# Javascript package
 
 ### What is it?
 
 It is package that will help you with generating payment URL according to 
-[TrxHosts documentation](https://developers.trxhost.com/en/en_PP_Integration.html).
+[GTXPoint documentation](https://developers.gtxpoint.com/en/en_PP_Integration.html).
 
 ### How to use?
 
@@ -13,16 +11,16 @@ It is package that will help you with generating payment URL according to
 
 1. Install the package (with your package manager):
 ```shell
-npm install trxhosts
-yarn add trxhosts
+npm install gtxpoint
+yarn add gtxpoint
 ```
 
 2. Require somewhere in your code, set parameters and get the URL:
 ```javascript
-const { Payment } = require('trxhosts');
+const { Payment } = require('gtxpoint');
 
 // create Payment object with your account ID and secret salt
-const e = new Payment('112', 'my_secret');
+const e = new Payment('https://base_url.test', '112', 'my_secret');
 
 // set payment details 
 e.paymentAmount = 1000;
@@ -37,11 +35,11 @@ const url = e.getUrl();
 
 Now your can render payment `url` somewhere on your checkout page.
 
-#### Receive callback from TrxHosts
+#### Receive callback
 
 Example with [Express](http://expressjs.com):
 ```javascript
-const { Callback } = require('trxhosts');
+const { Callback } = require('gtxpoint');
 
 app.post('/payment/callback', function(req, res) {
   const callback = new Callback('secret', req.body);

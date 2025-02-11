@@ -1,17 +1,17 @@
 const Payment = require('../src/payment');
 
 test('Object', () => {
-  const e = new Payment(121, 'secret', { cashierPredefinedAmounts: [1, 2], mode: 'cachier' }, 'http://baseurl');
+  const e = new Payment('http://baseurl', 121, 'secret', { cashierPredefinedAmounts: [1, 2], mode: 'cachier' });
   expect(e.getQueryString()).toBe('project_id=121&interface_type=%7B%22id%22%3A22%7D&cashier_predefined_amounts=1%2C2&mode=cachier');
 });
 
-const e = new Payment(121, 'secret', {}, 'http://baseurl');
+const e = new Payment('http://baseurl', 121, 'secret', {});
 
-test('Test TrxHosts.getQueryString', () => {
+test('Test GTXPoint.getQueryString', () => {
   expect(e.getQueryString()).toBe('project_id=121&interface_type=%7B%22id%22%3A22%7D');
 });
 
-test('Test TrxHosts.getUrl', () => {
+test('Test GTXPoint.getUrl', () => {
   const trimmedUrl = e.getUrl().replace(/&signature=.*$/, '');
   expect(trimmedUrl).toBe(`http://baseurl/payment?${e.getQueryString()}`);
 });
@@ -21,7 +21,7 @@ test('Test signature is urlencoded', () => {
   expect(url.split('=').pop().match(/[ +=,;]/)).toBeNull();
 });
 
-test('Test TrxHosts setters', () => {
+test('Test GTXPoint setters', () => {
   e.accountToken = 1;
   e.bestBefore = 1;
   e.cardOperationType = 'sale';

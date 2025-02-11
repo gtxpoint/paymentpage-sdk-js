@@ -3,7 +3,7 @@ const cipher = require('./cipher');
 
 /**
  * Payment Object
- * @link https://developers.trxhost.com/en/en_PP_Parameters.html
+ * @link https://developers.gtxpoint.com/en/en_PP_Parameters.html
  *
  * @property {string} accountToken
  * @property {string} bestBefore
@@ -61,12 +61,12 @@ class Payment {
   /**
    * Constructor
    *
+   * @param url {string} Base URL
    * @param projectId Project ID
    * @param salt Secret salt
    * @param obj {Object} Configuration object
-   * @param url {string} Base URL
    */
-  constructor(projectId, salt, obj = {}, url = 'https://paymentpage.trxhost.com') {
+  constructor(url, projectId, salt, obj = {}) {
     this.salt = salt;
     this.baseURI = url;
     this.params = {
